@@ -1,5 +1,7 @@
 import Square from "./Square";
 import {useState} from "react";
+import {calculateWinner} from "./helper";
+
 
 export default function App() {
     // Make the ui proper
@@ -7,8 +9,16 @@ export default function App() {
     const [board, setBoard] = useState(new Array(9).fill(null))
     const [currentPlayer, setCurrentPlayer] = useState("X")
 
+    const winner = calculateWinner(board)
+
     const handleSquareClick = (boardIndex) => {
-        if (board[boardIndex] !== null) {
+        const winner = calculateWinner(board);
+        console.log("calculating winner: ", winner)
+        // I should not handle clicks when
+        // 1) cell is taken
+        // 2) there is a winner > calculateWinner is either x or o
+        // calculate winner is not null
+        if (board[boardIndex] !== null || winner !== null) {
             return
         }
         const boardCopy = [...board]
@@ -19,6 +29,7 @@ export default function App() {
 
     return (
         <>
+            <p>{winner === null ? `player: ${currentPlayer}` : `winner: ${winner}`}</p>
             <div className="board-row">
                 <Square value={board[0]} onClick={() => handleSquareClick(0)}/>
                 <Square value={board[1]} onClick={() => handleSquareClick(1)}/>
